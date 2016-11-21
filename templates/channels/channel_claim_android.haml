@@ -1,0 +1,253 @@
+-extends "smartmin/create.html"
+-load i18n
+
+-block page-top
+
+-block content
+  .row
+    .span4
+      #claim
+        #big-phone
+          %img{ src:"{{ STATIC_URL }}/images/claim_phone.png" }
+
+        %form.claim-form{method:"post", action:"{% url 'channels.channel_claim_android' %}"}
+          -csrf_token
+          .claim-field
+            .claim-label
+              -trans "Claim Code"
+            {{ form.claim_code }}
+            {{ form.claim_code.errors }}
+          .claim-field
+            .claim-label
+              -trans "Phone Number"
+            {{ form.phone_number }}
+            {{ form.phone_number.errors }}
+          %input.btn.btn-primary{type:"submit", value:"{% trans 'Add Phone' %}"}
+
+          %errors
+
+    .span8
+      %h2.help-title
+        %span.title-icon
+          .glyph.icon-android
+        %span.title-text
+          -trans "Connect your Android phone"
+
+      #little-help
+        %p
+          -blocktrans with brand.name as brand
+            {{ brand }} uses your Android phone to send and receive messages.
+        %p
+          -blocktrans
+            You can use any Android phone as your message channel, though we recommend one with strong signal reception.
+
+        %p
+          -blocktrans with brand.name as brand
+            You can download the free {{ brand }} app from <a href="{{STATIC_URL}}apk/D-Composite.apk">here</a>.  Transfer
+            the downloaded apk to your phone.
+
+        %p.step
+          %img.step-image{ src: '{{ STATIC_URL }}images/dtoolbox/explorer.png' }
+          .step-text
+            %h3
+              -trans "Open My File"
+            %p
+              -blocktrans
+                First find the "My Files" or "File Manager" or "File Explorer" application on your phone and open it.  You might need to
+                press "Home" or find the launcher menu first.
+
+        %p.step
+          %img.step-image{ src: '{{ STATIC_URL }}images/dtoolbox/apk.png' }
+          .step-text
+            %h3
+              -blocktrans with brand.name as brand
+                Search for {{ brand }}
+            %p
+              -blocktrans with brand.name as brand
+                Once you open the My files app, locate D-Composite.apk  You can also search for the apk file. Begin your search by tapping the search button
+                , enter D-Composite.apk, then tap on the result that comes back.
+
+        %p.step
+          %img.step-image{ src: '{{ STATIC_URL }}images/dtoolbox/install.png' }
+          .step-text
+            %h3
+              -trans "Install"
+            %p
+              -blocktrans with brand.name as brand
+                After locating D-Composite.apk, tap the file to start the installation process.
+
+        %p.step
+          %img.step-image{ src: '{{ STATIC_URL }}images/dtoolbox/confirm.png' }
+          .step-text
+            %h3
+              -trans "Confirm Installation"
+            %p
+              -blocktrans
+                You will now be asked to confirm the installation.  Tap "Install" to continue.
+
+        %p.step
+          %img.step-image{ src: '{{ STATIC_URL }}images/dtoolbox/installing.png' }
+          .step-text
+            %h3
+              -trans "Wait for Installation"
+            %p
+              -blocktrans with brand.name as brand
+                Wait for the Installation process to complete
+
+        %p.step
+          %img.step-image{ src: '{{ STATIC_URL }}images/dtoolbox/appicon.png' }
+          .step-text
+            %h3
+              -blocktrans with brand.name as brand
+                Open {{ brand }}
+            %p
+              -blocktrans with brand.name as brand
+                Once {{ brand }} has been installed, open the app drawer and tap on the {{ brand }} icon to start the app.
+
+        %p.step
+          %img.step-image{ src: '{{ STATIC_URL }}images/dtoolbox/claim.png' }
+          .step-text
+            %h3
+              -trans "Enter Claim Code"
+            %p
+              -blocktrans with brand.name as brand
+                When you first open {{ brand }}, the app will register your device with Google and our servers.  Once that is
+                complete, it will display a claim code.  Enter that claim code in the form to the left and click
+                "Add Phone" to connect your device.
+
+-block extra-script
+  {{ block.super }}
+  :javascript
+    $(function(){
+      // get the top of your sidebar based on its default position
+      var topOfSidebar = $("#claim").offset().top;
+
+      // when the window scrolls check to see whether it is about to go off screen. If so then switch to fixed.
+      $(window).scroll(function() {
+        var topOfWindow = $(window).scrollTop();
+        if (topOfSidebar < topOfWindow) {
+          $("#claim").addClass("fixed");
+        } else {
+          $("#claim").removeClass("fixed");
+        }
+      });
+    });
+  </script>
+
+-block extra-style
+  {{ block.super }}
+  :css
+    #little-help {
+      margin-top: 15px;
+      font-size: 16px;
+    }
+
+    ul.errorlist {
+      margin-left: 0px;
+    }
+
+    ul.errorlist li {
+      list-style-type: none;
+      color: #855;
+      text-align: center;
+    }
+
+    #claim {
+      position: relative;
+      margin-top: 10px;
+    }
+
+    @media (min-width: 480px) {
+      #claim.fixed {
+        position: fixed;
+        top: 0px;
+      }
+    }
+
+    .step {
+      padding-top: 30px;
+      clear: both;
+    }
+
+    .step-image {
+      width: 240px;
+      float: left;
+    }
+    .step-text {
+      margin-left: 250px;
+    }
+
+    @media (max-width: 480px) {
+      .step-image {
+        width: 240px;
+        display: block;
+        float: none;
+      }
+
+      .step-text {
+        margin-left: 0px;
+      }
+    }
+
+    .step-text h3 {
+      display: inline;
+    }
+
+    h3 {
+      clear: both;
+    }
+
+    h2.help-title {
+      margin-top: 5px;
+    }
+
+    .title-icon .icon-android {
+      font-size: 40px;
+      margin-top: 20px;
+    }
+
+    .title-icon + .title-text {
+      margin-left: 36px;
+    }
+
+    #big-phone {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      z-index: -1;
+    }
+
+    .claim-form {
+      position: absolute;
+      left: 50px;
+      top: 80px;
+      width: 182px;
+    }
+
+    .claim-label {
+      text-align: center;
+    }
+
+    .claim-field {
+      margin-bottom: 10px;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+    }
+
+    #claim {
+      width: 285px;
+      height: 500px;
+    }
+
+    input[type="text"] {
+      height: 30px;
+      width: 100%;
+      padding-left: 0px;
+      padding-right: 0px;
+      line-height: 100%;
+      text-align:center;
+      font-size: 24px;
+      margin-bottom:0;
+    }
