@@ -39,7 +39,7 @@ CACHES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'temba',
+        'NAME': 'tembbat',
         'USER': 'temba',
         'PASSWORD': 'temba',
         'HOST': 'localhost',
